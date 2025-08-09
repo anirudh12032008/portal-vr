@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <title>PortalVR - Full VR Experience</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="./logo.png">
+  <link rel="shortcut icon" type="image/png" href="./logo.png">
 <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
 <script>
@@ -58,6 +60,7 @@ VR Mode Active | WASD/Arrow keys to move | Click green pads to teleport | Mouse 
 </div>
 <a-scene vr-mode-ui="enabled: true" background="color: #000">
 <a-assets>
+<img id="logo" src="logo.png" crossorigin="anonymous">
 <a-mixin id="glow-text"
 text="font: kelsonsans;
 align: center;
@@ -568,6 +571,15 @@ geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
 material="color: white; shader: flat"
 animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
 animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"></a-cursor>
+<!-- Logo in bottom-right corner -->
+<a-plane 
+position="0.8 -0.7 -2" 
+rotation="0 0 0" 
+width="0.3" 
+height="0.3" 
+material="src: #logo; transparent: true; alphaTest: 0.1" 
+opacity="0.8">
+</a-plane>
 </a-entity>
 </a-entity>
 <script>
