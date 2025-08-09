@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Workshop</title>
+    <meta name="description" content="360° Image Gallery - A-Frame">
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-template-component@3.x.x/dist/aframe-template-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-layout-component@5.x.x/dist/aframe-layout-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@5.x.x/dist/aframe-event-set-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
+    
+    <script id="link" type="text/html">
+      <a-entity class="link"
+        data-src="${src}"
+        geometry="primitive: plane; height: 1; width: 1"
+        material="shader: flat; src: ${thumb}"
+        sound="on: click; src: #click-sound"
+        event-set__mouseenter="scale: 1.5 1.5 1"
+        event-set__mouseleave="scale: 1 1 1"
+        event-set__click="_target: #image-360; _delay: 300; material.src: ${src}"
+        proxy-event="event: click; to: #image-360; as: fade">
+      </a-entity>
+    </script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <img id="india" crossorigin="anonymous" src="./ind.jpg">
+        <img id="india-thumb" crossorigin="anonymous" src="./p1.png">
+
+        <img id="newyork" crossorigin="anonymous" src="./ny.jpg">
+        <img id="newyork-thumb" crossorigin="anonymous" src="./p2.png">
+
+        <img id="romania" crossorigin="anonymous" src="./ro.jpg">
+        <img id="romania-thumb" crossorigin="anonymous" src="./p3.png">
+
+        <audio id="click-sound" crossorigin="anonymous" src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"></audio>
+      </a-assets>
+
+      <a-sky id="image-360" radius="30" src="#india"
+        animation__fade="property: components.material.material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fade"
+        animation__fadeback="property: components.material.material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: animationcomplete__fade">
+      </a-sky>
+
+      <a-entity id="links" layout="type: line; margin: 1.5" position="-1.5 -1 -4">
+        <a-entity template="src: #link" data-src="#india" data-thumb="#india-thumb"></a-entity>
+        <a-entity template="src: #link" data-src="#newyork" data-thumb="#newyork-thumb"></a-entity>
+        <a-entity template="src: #link" data-src="#romania" data-thumb="#romania-thumb"></a-entity>
+      </a-entity>
+
+      <a-entity camera look-controls wasd-controls="acceleration: 55; fly: true">
+        <a-cursor
+          id="cursor"
+          position="0 0 -1"
+          geometry="primitive: ring; radiusInner: 0.015; radiusOuter: 0.025"
+          material="color: #667eea; shader: flat"
+          cursor="fuse: true; fuseTimeout: 2000"
+          animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+          animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 2000; from: 1 1 1; to: 0.6 0.6 0.6"
+          animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1"
+          event-set__mouseenter="_event: mouseenter; color: #ff6b6b"
+          event-set__mouseleave="_event: mouseleave; color: #667eea"
+          raycaster="objects: .link,.clickable">
+        </a-cursor>
+      </a-entity>
+
+<a-box id="box-india" class="clickable" position="-1.5 -0.5 -3" depth="0.5" height="0.5" width="0.5" color="#ff6666"
+  visible="true"
+  sound="on: click; src: #click-sound"
+  event-set__click="color: #66ff66">
+</a-box>
+
+<a-box id="box-newyork" class="clickable" position="0 -0.5 -3" depth="0.5" height="0.5" width="0.5" color="#6666ff"
+  visible="false"
+  sound="on: click; src: #click-sound"
+  event-set__click="color: #ffff66">
+</a-box>
+
+<a-box id="box-romania" class="clickable" position="1.5 -0.5 -3" depth="0.5" height="0.5" width="0.5" color="#66ffff"
+  visible="false"
+  sound="on: click; src: #click-sound"
+  event-set__click="color: #ff66ff">
+</a-box>
+
+
+
+    </a-scene>
+
+    
+    <script>
+      document.querySelector('a-scene').addEventListener('click', function(event) {
+        if (event.target.classList.contains('link')) {
+          document.querySelector('#box-india').setAttribute('visible', false);
+          document.querySelector('#box-newyork').setAttribute('visible', false);
+          document.querySelector('#box-romania').setAttribute('visible', false);
+          
+          const targetSrc = event.target.getAttribute('data-src');
+          
+          setTimeout(() => {
+            if (targetSrc === '#india') {
+              document.querySelector('#box-india').setAttribute('visible', true);
+            } else if (targetSrc === '#newyork') {
+              document.querySelector('#box-newyork').setAttribute('visible', true);
+            } else if (targetSrc === '#romania') {
+              document.querySelector('#box-romania').setAttribute('visible', true);
+            }
+          }, 600);
+        }
+      });
+    </script>
+
+  </body>
+</html>
